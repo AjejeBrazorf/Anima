@@ -100,7 +100,7 @@ class App extends Component {
               <option value="walking">Walking</option>
             </select>
           </div>
-          <div className="card--section">
+          <div className="card--section ">
             <PropertyHandler
               change={this.changeCSSProperty.bind(this)}
               propertyLabel="Angle legs"
