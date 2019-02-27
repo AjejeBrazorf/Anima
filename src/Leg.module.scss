@@ -1,0 +1,170 @@
+/* leg parameters*/
+$durationUnit: 1s;
+$size: 10vw;
+$legHeight: 15vw;
+$footWidth: 5.5vw;
+$walkingAnglePure: 70;
+$chamColor: #aaa;
+
+$walking-angle: $walkingAnglePure *1deg;
+$foot-animation-scale-property: $walkingAnglePure * 0.025;
+@if $foot-animation-scale-property < 1{
+  $foot-animation-scale-property: 1;
+} 
+@if $foot-animation-scale-property > 1.5{
+  $foot-animation-scale-property: 1.5;
+}
+
+$foot-animation-rotate-property: $walking-angle*1.75;
+@if $foot-animation-rotate-property > 105deg{
+  $foot-animation-rotate-property: 105deg;
+} 
+
+@mixin box-shadow {
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2),
+    inset calc(var(--size) *- 0.0125) calc(var(--size) *- 0.0125)
+      calc(var(--size) *- 0.25) calc(var(--size) *- 0.0125) rgba(0, 0, 0, 0.2);
+}
+
+@mixin wrapper {
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    background: transparent; 
+    width: 0;
+    height: 0;
+  }
+  max-width: 100%;
+}
+
+pre{
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+
+* {
+  transition: 0.4s transform cubic-bezier(0.64, 0.57, 0.67, 1.53);
+}
+
+.legWrapper {
+  --durationUnit: $durationUnit;
+  --size: $size;
+  --legHeight: $legHeight;
+  --footWidth: $footWidth;
+  --walkingAnglePure: $walkingAnglePure;
+  --walking-angle: calc(var(--walkingAnglePure) * 1deg);
+  --foot-animation-scale-property: calc(var(--walkingAnglePure) * 0.025);
+  --foot-animation-rotate-property: calc(var(--walking-angle) * 1);
+  --chamColor: $chamColor;
+  position: relative;
+  margin: auto;
+  width:calc(2 * calc(var(--legHeight) + var(--footWidth) * 1.5) );
+  height: calc(var(--legHeight) + var(--footWidth) );
+//  border: 2px dotted gray;
+  @include wrapper;
+}
+
+.leg {
+  position: absolute;
+  z-index: 1;
+//  left: calc(var(--size) * 0.36);
+  width: calc(var(--size) * 0.25);
+  height: var(--legHeight);
+  border: calc(var(--size) * 0.1) solid var(--chamColor);
+  border-color: transparent transparent transparent var(--chamColor);
+  transform-origin: top left;
+  left: calc(50% - var(--footWidth)/2);
+  top: 5%;
+  //   margin: #{-$size * 0.15} 0 #{-$size * 0.1} #{$size * 0.162};
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    width: var(--footWidth);
+    height: calc(var(--footWidth) * 0.65);
+    top: calc(var(--legHeight) - calc(var(--footWidth) * 0.32));
+    right: calc(calc(var(--size) * 0.25));
+    background: var(--chamColor);
+    transform-origin: right;
+    border-radius: var(--footWidth);
+    @include box-shadow;
+  }
+
+  &.walking {
+    :global {
+      animation: var(--durationUnit) leg-walking-anim infinite;
+    }
+    &:before {
+      :global {
+        animation: var(--durationUnit) feet-walking-anim infinite;
+      }
+    }
+  }
+  &.back {
+    //      margin: #{-$size * 0.475} 0 #{-$size * 0.1} #{$size * 0.55};
+    filter: brightness(0.8);
+    z-index: -1;
+    animation-delay: calc(var(--durationUnit) / 2.1);
+    &:before {
+      animation-delay: calc( var(--durationUnit) / 2.1);
+    }
+  }
+}
+
+@keyframes :global(leg-walking-anim) {
+  0%,
+  100% {
+    transform: rotate(var(--walking-angle)) scaleY(0.7) translateY(-10%);
+    border-radius: calc(var(--walkingAnglePure) * .8%);  
+    width: calc(var(--size) * 3);
+    transform-origin: 10% 15%;     
+  }
+  
+  25% {
+    transform: rotate(20deg) scaleY(0.9);
+    border-radius: 0%;
+    width: calc(var(--size) * 0.25);
+  }
+
+  75% {
+    transform: rotate(calc(var(--walking-angle) * -1)) scaleY(0.7);
+    border-radius: calc(var(--walkingAnglePure) * .6%);
+    width: calc(var(--size) * 1.5);
+  }
+  
+}
+
+@keyframes :global(feet-walking-anim) {
+  0%,
+  100% {
+  //  transform:  
+//      rotateZ(calc(var(--foot-animation-rotate-property) * -1));
+    //  scaleX(var(--foot-animation-scale-property));
+      transform: translateX(-100%) translateY(0%) rotateZ(calc(var(--foot-animation-rotate-property) * .1)); 
+      top:calc(var(--legHeight) * 0.8 );
+      left: 0; 
+  }
+  25% {
+    top: calc(var(--legHeight) - calc(var(--footWidth) * 0.32));
+    transform:  rotateZ(-9deg) translateX(-100%) translateY(-50%); 
+  }
+  75% {
+    transform: rotateZ(-90deg)
+    translateY(-100%)
+    scaleX(var(--foot-animation-scale-property));
+  }
+  
+}
+
+@keyframes :global(legWrapper-walking-anim) {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(0, 0);
+  }
+  75% {
+    transform: translate(0, 0);
+  }
+}

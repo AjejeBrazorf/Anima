@@ -1,2 +1,0 @@
-# Anima
-Created with CodeSandbox

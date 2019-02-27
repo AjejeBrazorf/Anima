@@ -1,0 +1,10 @@
+.property--section{
+    border-bottom: thin solid #dadce0;
+    margin: 5% auto;
+    &:last-child {
+        border-bottom: 0;
+    }
+    pre{
+        width: 100%;
+    }
+}

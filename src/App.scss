@@ -1,0 +1,75 @@
+.App {
+  margin: 16px;
+}
+
+
+.card {
+  border: thin solid #dadce0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  min-width: 45%;
+  max-width: 100%;
+  width: fit-content;
+  margin: 5% auto;
+}
+
+.card--section {
+  border-top: thin solid #dadce0;
+  padding: 0;
+  &:first-child {
+    border:0;
+  }
+  .title {
+    text-align: center;
+    width: 100%;
+    width: -moz-available;          /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    width: fill-available;
+  }
+}
+
+*{
+  transition: 0.2s all cubic-bezier(0.64, 0.57, 0.67, 1.53);
+}
+
+@mixin box-shadow {
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2),
+    inset calc(var(--size) *- 0.0125) calc(var(--size) *- 0.0125)
+      calc(var(--size) *- 0.25) calc(var(--size) *- 0.0125) rgba(0, 0, 0, 0.2);
+}
+select {
+  padding: 5px 35px 5px 5px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-left: 0;
+  border-radius: 0 30px 30px 0;
+  height: 34px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+//  background: url(http://www.stackoverflow.com/favicon.ico) 96% / 15% no-repeat #eee;
+  &:focus{
+    border-color: #3498b3;
+    outline: none;
+      border-radius: 0 30px 0px 0;
+
+  }
+  @include box-shadow;
+}
+
+
+/* CAUTION: IE hackery ahead */
+
+
+select::-ms-expand { 
+    display: none; /* remove default arrow in IE 10 and 11 */
+}
+
+/* target Internet Explorer 9 to undo the custom arrow */
+@media screen and (min-width:0\0) {
+    select {
+        background:none\9;
+        padding: 5px\9;
+    }
+}
