@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Radium, { StyleRoot } from 'radium';
 import './App.scss';
 import Legs from './Legs/Legs';
+import Menu from './LateralMenu/LateralMenu';
 import PropertyHandler from './PropertyHandler/PropertyHandler';
 
 class App extends Component {
@@ -151,9 +152,13 @@ class App extends Component {
         </div>
       );
     });
+    /*<div className="App">{legsRender}</div>*/
+
     return (
       <StyleRoot>
-        <div className="App">{legsRender}</div>
+        <div className="App">
+          <Menu />
+        </div>
       </StyleRoot>
     );
   }

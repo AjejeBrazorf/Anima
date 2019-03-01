@@ -1,0 +1,327 @@
+@import './../css/mixins.scss';
+
+$btnWidth: 7vw;
+$btnWidthPortrait: 20vw;
+$btnMargin: $btnWidth/3;
+$btnMaxWidth: unset;
+$btnAnimDuration: .5s;
+$btnColor:  #eee;
+$btnColorHover: #eee;
+$btnInnerColor: #1d1e22;
+$btnInnerColorHover: #1d1e22;
+
+.lateral-bar {
+//  background: blue;
+  position: fixed;
+  right:0;
+  top: 0;
+  height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  .lateral-bar--bottom-section {
+    
+    @media all and (orientation:portrait) {
+    /* Style adjustments for portrait mode goes here */
+      $btnWidth: $btnWidthPortrait;
+      $btnMargin: $btnWidth/3;
+      $btnMaxWidth: unset;
+      $btnAnimDuration: .5s;
+      bottom: #{2 * $btnWidth};
+      max-height: calc(100% - 4 * #{$btnWidth});
+      border-radius: $btnWidth 0 0 $btnWidth;
+    }
+    display: flex;
+    flex-direction: column;
+    bottom: #{2 * $btnWidth};
+    position: absolute;
+    width: 100%;
+    max-height: calc(100% - 4 * #{$btnWidth});
+    min-height: $btnWidth;
+    border-radius: $btnWidth 0 0 $btnWidth;
+    right: 0;
+    overflow-y: hidden;
+    transform-origin: right;
+    transform: translateX(150%);
+    background: #1d1e22;
+    @include box-shadow;
+    transition: .2s transform cubic-bezier(0.64, 0.57, 0.67, 1.53) .15s;
+  }
+   &.show {
+      .lateral-bar--bottom-section {
+        transform-origin: center;
+        overflow-y: auto;
+        @include scrollbar;
+        transform: translateX(0%);
+        animation: .4s  bounce-anim linear 1 none;
+        animation-fill-mode: none !important;
+      }
+    }
+}
+
+.btn{
+  width: $btnWidth;
+  height: $btnWidth;
+  border-radius: $btnWidth;
+  background: $btnColor;
+  max-width: $btnMaxWidth;
+  max-height: $btnMaxWidth;
+  min-width: $btnWidth;
+  min-height: $btnWidth;
+  margin: $btnMargin;
+  @media all and (orientation:portrait) {
+    /* Style adjustments for portrait mode goes here */
+    $btnWidth: $btnWidthPortrait;
+    $btnMargin: $btnWidth/3;
+    $btnMaxWidth: unset;
+    $btnAnimDuration: .5s;
+    width: $btnWidth;
+    height: $btnWidth;
+    border-radius: $btnWidth;
+    background: $btnColor;
+    max-width: $btnMaxWidth;
+    max-height: $btnMaxWidth;
+    min-width: $btnWidth;
+    min-height: $btnWidth;
+    margin: $btnMargin;
+  }
+  position: relative;
+//  transform: translateY(100vh);
+  @include box-shadow;
+  -webkit-tap-highlight-color:  rgba(3, 169, 244, 0.2); 
+
+  &:before, &:after {
+    content:'';
+    position: absolute;    
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-color: $btnInnerColor;
+    color: $btnInnerColor;
+    animation: 1s btn-anim-before cubic-bezier(1, 1.76, 0.76, 0.68);
+  }
+    &:focus {
+    outline: 0;
+    border-radius: 58% 35% 42% 65% / 51% 51% 49% 49%;
+    box-shadow: 0px 2.5px 5px 2px rgba(67, 91, 187, 0.5803921568627451), -11px -6px 5px 0px rgba(173, 0, 255, 0.6705882352941176), 10px -6px 7px #03A9F4 !important;
+    
+  }
+  &:hover {
+    cursor:pointer;
+    border-radius: 58% 42% 65% 35% / 49% 49% 51% 51%;
+    box-shadow: 0px 2.5px 5px 2px #03A9F4, -11px -6px 5px 0px rgba(67, 91, 187, 0.5803921568627451), 10px -6px 7px rgba(173, 0, 255, 0.6705882352941176) !important;
+    filter: brightness(.9);
+    background: $btnColorHover;
+    &:before, &:after{
+      border-color: $btnInnerColorHover;
+      color: $btnInnerColorHover;
+    }
+  }
+  &:active {
+    border-radius: 11% 89% 32% 68% / 57% 28% 72% 43% ;
+    box-shadow: 0px 2.5px 5px 2px rgba(173, 0, 255, 0.6705882352941176), -11px -6px 5px 0px #03A9F4, 10px -6px 7px rgba(67, 91, 187, 0.5803921568627451) !important;
+    filter: brightness(.7);
+  }
+}
+
+@for $i from 1 through 10 {
+  .btn:nth-child(#{$i}n) {
+    $in-between-delay: ($i - 1)/5  * $btnAnimDuration;
+    animation:  #{$btnAnimDuration} show-anim-inverse linear $in-between-delay 1 forwards;
+  }
+  .show{
+    .btn:nth-child(#{$i}n) {
+      $in-between-delay: ($i - 1)/5  * $btnAnimDuration;
+      animation:  $btnAnimDuration show-anim cubic-bezier(1, 1.76, 0.76, 0.68) $in-between-delay 1 none, .4s bounce-anim cubic-bezier(0.64, 0.57, 0.67, 1.53)  #{$in-between-delay + $btnAnimDuration} 1 none;
+      &:before, &:after {
+        animation:.4s bounce-anim cubic-bezier(0.64, 0.57, 0.67, 1.53)  #{$in-between-delay * 2 + $btnAnimDuration} 1 backwards;
+      }
+    }
+   }
+}
+
+.btn--done {
+    &:before {
+    width: 50%;
+    height: 30%;
+    transform: translate(-50%, -70%) rotate(-45deg) ;
+    border: 2px $btnInnerColor solid;
+    border-top: 0;
+    border-right: 0;
+  }
+}
+
+.btn--head {
+    &:before {
+      width: 50%;
+      height: 50%;
+      border-radius:100%;
+      border: 2px $btnInnerColor solid;
+    }
+    &:after {
+      background: linear-gradient(90deg, $btnInnerColor 0%, $btnInnerColor 11%, rgba(255, 255, 255, 0) 11%, rgba(255, 255, 255, 0) 60%, $btnInnerColor 60%, $btnInnerColor 71%, rgba(255, 255, 255, 0) 71%);
+      height: 4%;
+      width: 39.8%;
+      top: 45%;
+      left: 55%;
+  }
+  &:hover{
+    &:after{
+      top: 50%;
+      background: linear-gradient(90deg, $btnInnerColorHover 0%, $btnInnerColorHover 11%, rgba(255, 255, 255, 0) 11%, rgba(255, 255, 255, 0) 60%, $btnInnerColorHover 60%, $btnInnerColorHover 71%, rgba(255, 255, 255, 0) 71%);
+    }
+  }
+}
+
+
+.btn--arms {
+   &:before {
+      width: 30%;
+      height: 30%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      border: 2px $btnInnerColor solid;
+      border-top: 0;
+      border-right: 0;
+    }
+    &:after {
+      height: 14%;
+      width: 14%;
+      border: 2px solid $btnInnerColor;
+      border-radius: 100%;
+      left: 77%;
+      top: 58%;
+  }
+  &:hover{
+    &:before {    
+      transform: translate(-50%, -50%) rotate(-55deg);
+    }
+    &:after {
+      left: 70%;
+      top: 38%;
+      transform: translate(-50%, -50%) rotate(-55deg);
+    }
+  }
+}
+
+.btn--leg {
+    &:before {
+      font-size: 20px;
+      width: 25%;
+      height: 50%;
+      border: 2px $btnInnerColor solid;
+      border-bottom: 0;
+      border-radius: 5px;
+    }
+    &:after {
+      background: linear-gradient(90deg, $btnInnerColor 0%, $btnInnerColor 32%,rgba(255, 255, 255, 0) 32%,rgba(255, 255, 255, 0) 60%, $btnInnerColor 60%, $btnInnerColor 100%);
+      height: 4%;
+      width: 39.8%;
+      top: 75%;
+      left: 45%;
+  }
+     &:hover{
+    &:before, &:after {    
+      transform-origin: bottom;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+  }
+}
+
+.btn--body {
+    &:before {
+      width: 25%;
+      height: 50%;
+      border: 2px $btnInnerColor solid;
+      border-radius: 8px;
+    }
+    &:after {
+      background: linear-gradient(90deg, $btnInnerColor 0%, $btnInnerColor 11%, rgba(255, 255, 255, 0) 11%, rgba(255, 255, 255, 0) 60%, $btnInnerColor 60%, $btnInnerColor 71%, rgba(255, 255, 255, 0) 72%);
+      height: 2%;
+      width: 19.8%;
+      top: 45%;
+      left: 52%;
+  }
+   
+   &:hover{
+    &:before {    
+      width: 35%;
+      border-radius: 58px;
+    }
+    &:after {
+      background: linear-gradient(90deg, $btnInnerColorHover 0%, $btnInnerColorHover 11%, rgba(255, 255, 255, 0) 11%, rgba(255, 255, 255, 0) 60%, $btnInnerColorHover 60%, $btnInnerColorHover 71%, rgba(255, 255, 255, 0) 71%);
+    }
+  }
+}
+
+.btn--fixed {
+  animation: none !important;
+  transform: translate(0);
+  position: absolute;
+  bottom: 0;
+  &:before{
+    content:'+';
+    font-size: $btnWidth;
+    @media all and (orientation:portrait) {
+      /* Style adjustments for portrait mode goes here */
+      $btnWidth: $btnWidthPortrait;
+      $btnMargin: $btnWidth/3;
+      $btnMaxWidth: unset;
+      $btnAnimDuration: .5s;
+      font-size: $btnWidth;
+    }
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    top: 50%;
+    transition: 0.2s all cubic-bezier(0.64, 0.57, 0.67, 1.53);
+  }
+}
+.show{
+  .btn--fixed {      
+    &:before{
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  }
+}
+
+
+@keyframes bounce-anim {
+  from {
+    border-radius: 48% 52% 54% 46% / 84% 84% 16% 16% ;
+    --scale: 0 .5;
+  }
+  40% {
+    border-radius: 48% 52% 54% 46% / 12% 8% 92% 88%  ;
+    --scale: 0 1.2;
+  }
+  70% {
+    border-radius: 48% 52% 54% 46% / 74% 73% 27% 26% ;
+    --scale: 0 .8;
+  }
+  83% {
+    border-radius: 48% 52% 54% 46% / 35% 35% 65% 65% ;
+  }
+}
+
+@keyframes show-anim {
+  from {
+    transform: translateY(100vh);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes show-anim-inverse {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100vh);
+  }
+}
+
+@keyframes btn-anim-hover {
+  from {
+ //   transform: scale(0); 
+  }
+}

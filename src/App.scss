@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:100');
+@import "css/mixins.scss"; 
+
 .App {
   margin: 16px;
 }
 
+* {
+  font-family: 'Josefin Sans', sans-serif;
+  transition: 0.4s all cubic-bezier(0.64, 0.57, 0.67, 1.53);
+}
 
 .card {
   border: thin solid #dadce0;
@@ -38,15 +45,7 @@
   bottom: 0;
 }
 
-*{
-  transition: 0.2s all cubic-bezier(0.64, 0.57, 0.67, 1.53);
-}
 
-@mixin box-shadow {
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2),
-    inset calc(var(--size) *- 0.0125) calc(var(--size) *- 0.0125)
-      calc(var(--size) *- 0.25) calc(var(--size) *- 0.0125) rgba(0, 0, 0, 0.2);
-}
 select {
   padding: .5rem;
   margin: .5rem;
