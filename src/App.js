@@ -9,6 +9,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      menu: {
+        isOpen: true
+      },
       getLabelName: query => {
         switch (query) {
           case 'walkingAnglePure':
@@ -72,6 +75,14 @@ class App extends Component {
     });
   };
 
+  toogleMenu = event => {
+    const menu = { ...this.state.menu };
+    menu.isOpen = !menu.isOpen;
+    this.setState({
+      menu: menu
+    });
+  };
+
   ID = () => {
     // Math.random should be unique because of its seeding algorithm.
     // Convert it to base 36 (numbers + letters), and grab the first 9 characters
@@ -85,7 +96,7 @@ class App extends Component {
   };
 
   render() {
-    const { legs } = this.state;
+    const { legs, menu } = this.state;
     const legsRender = legs.map(leg => {
       return (
         <div key={leg.id} className="card">
@@ -157,7 +168,7 @@ class App extends Component {
     return (
       <StyleRoot>
         <div className="App">
-          <Menu />
+          <Menu isOpen={menu.isOpen} menuHandler={this.toogleMenu.bind(this)} />
         </div>
       </StyleRoot>
     );
