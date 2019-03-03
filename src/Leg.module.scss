@@ -1,3 +1,5 @@
+@import "css/mixins.scss"; 
+
 /* leg parameters*/
 $durationUnit: 1s;
 $size: 10vw;
@@ -20,20 +22,11 @@ $foot-animation-rotate-property: $walking-angle*1.75;
   $foot-animation-rotate-property: 105deg;
 } 
 
-@mixin box-shadow {
+@mixin part-box-shadow {
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2),
     inset calc(var(--size) *- 0.0125) calc(var(--size) *- 0.0125)
       calc(var(--size) *- 0.25) calc(var(--size) *- 0.0125) rgba(0, 0, 0, 0.2);
-}
-
-@mixin wrapper {
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    background: transparent; 
-    width: 0;
-    height: 0;
-  }
-  max-width: 100%;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2), inset 1rem 1rem 2rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 pre{
@@ -46,7 +39,7 @@ pre{
   transition: 0.4s transform cubic-bezier(0.64, 0.57, 0.67, 1.53);
 }
 
-.legWrapper {
+.legWrapper:global {
   --durationUnit: $durationUnit;
   --size: $size;
   --legHeight: $legHeight;
@@ -60,7 +53,10 @@ pre{
   margin: auto;
   width:calc(2 * calc(var(--legHeight) + var(--footWidth) * 1.5) );
   height: calc(var(--legHeight) + var(--footWidth) );
-//  border: 2px dotted gray;
+  &:focus, &:focus-within, &:active {
+    border: 2px dotted gray;
+    border-radius: 8px;
+  }
   @include wrapper;
 }
 
@@ -87,7 +83,7 @@ pre{
     background: var(--chamColor);
     transform-origin: right;
     border-radius: var(--footWidth);
-    @include box-shadow;
+    @include part-box-shadow;
   }
 
   &.walking {

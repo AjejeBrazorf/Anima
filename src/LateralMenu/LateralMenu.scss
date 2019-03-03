@@ -43,7 +43,7 @@ $btnInnerColorHover: #1d1e22;
     transform-origin: right;
     transform: translateX(150%);
     background: #1d1e22;
-    @include box-shadow;
+    @include hard-box-shadow;
     transition: .2s transform cubic-bezier(0.64, 0.57, 0.67, 1.53) .15s;
   }
    &.show {
@@ -86,7 +86,7 @@ $btnInnerColorHover: #1d1e22;
   }
   position: relative;
 //  transform: translateY(100vh);
-  @include box-shadow;
+  @include hard-box-shadow;
   -webkit-tap-highlight-color:  rgba(3, 169, 244, 0.2); 
 
   &:before, &:after {
@@ -257,9 +257,12 @@ $btnInnerColorHover: #1d1e22;
   transform: translate(0);
   position: absolute;
   bottom: 0;
-  &:before{
-    content:'+';
+  &:before, &:after{
+    content:' ';
     font-size: $btnWidth;
+    border-left: 2px solid $btnInnerColor;
+    width: 0%;
+    height: 50%;
     @media all and (orientation:portrait) {
       /* Style adjustments for portrait mode goes here */
       $btnWidth: $btnWidthPortrait;
@@ -269,16 +272,25 @@ $btnInnerColorHover: #1d1e22;
       font-size: $btnWidth;
     }
     left: 50%;
-    transform: translate(-50%, -50%);
+    position: absolute;
     transform-origin: center;
     top: 50%;
     transition: 0.2s all cubic-bezier(0.64, 0.57, 0.67, 1.53);
+  }
+  &:before{
+    transform: translate(0%, -50%) rotate(-90deg);
+  }
+  &:after {
+    transform: translate(0%, -50%) rotate(0deg);
   }
 }
 .show{
   .btn--fixed {      
     &:before{
-      transform: translate(-50%, -50%) rotate(45deg);
+      transform: translate(0%, -50%) rotate(45deg);
+    }
+    &:after {
+      transform: translate(0%, -50%)  rotate(-45deg);
     }
   }
 }

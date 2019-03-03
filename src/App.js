@@ -4,12 +4,28 @@ import './App.scss';
 import Legs from './Legs/Legs';
 import Menu from './LateralMenu/LateralMenu';
 import PropertyHandler from './PropertyHandler/PropertyHandler';
+import DetailCard from './DetailCard/DetailCard';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showCard: '',
       menu: {
+        toggle: (...args) => {
+          const menu = { ...this.state.menu };
+          menu.isOpen = !menu.isOpen;
+          this.setState({
+            menu: menu
+          });
+        },
+        close: () => {
+          const menu = { ...this.state.menu };
+          menu.isOpen = false;
+          this.setState({
+            menu: menu
+          });
+        },
         isOpen: true
       },
       getLabelName: query => {
@@ -29,6 +45,7 @@ class App extends Component {
         }
       },
       legs: [
+        /*
         {
           label: 'front-legs',
           id: this.ID(),
@@ -51,11 +68,34 @@ class App extends Component {
           chamColor: '#4caf50',
           animation: ''
         }
+        */
       ]
     };
   }
 
-  changeCSSProperty = event => {
+  addPart = partName => {
+    const part = [...this.state[partName]];
+    switch (partName) {
+      case 'legs':
+        part.push({
+          label: 'Name me!',
+          id: this.ID(),
+          speed: '1',
+          size: '10',
+          legHeight: '15',
+          footWidth: '5',
+          walkingAnglePure: '35',
+          chamColor: '#4caf50',
+          animation: ''
+        });
+        break;
+    }
+    this.setState({
+      legs: part
+    });
+  };
+
+  changeLegsCSSProperty = event => {
     const legs = [...this.state.legs];
     const legID = event.target.id;
     const legProperty = event.target.attributes.getNamedItem(
@@ -75,11 +115,13 @@ class App extends Component {
     });
   };
 
-  toogleMenu = event => {
-    const menu = { ...this.state.menu };
-    menu.isOpen = !menu.isOpen;
+  toggleMenu = () => {
+    this.state.menu.toggle();
+  };
+
+  showCardFromId = id => {
     this.setState({
-      menu: menu
+      showCard: id
     });
   };
 
@@ -96,80 +138,54 @@ class App extends Component {
   };
 
   render() {
-    const { legs, menu } = this.state;
-    const legsRender = legs.map(leg => {
-      return (
-        <div key={leg.id} className="card">
-          <div className="card--section">
-            <h3 className="title">{leg.label}</h3>
-            <Legs leg={leg} />
-            <select
-              id={leg.id + '_animation'}
-              data-propertyname="animation"
-              onChange={this.changeCSSProperty.bind(this)}
-              value={leg.animation}>
-              <option value="" />
-              <option value="walking">Walking</option>
-            </select>
-          </div>
-          <div className="card--section ">
-            <PropertyHandler
-              change={this.changeCSSProperty.bind(this)}
-              propertyLabel="Angle legs"
-              property={leg.walkingAnglePure}
-              propertyName="walkingAnglePure"
-              change={this.changeCSSProperty.bind(this)}
-              id={leg.id}
-              min="5"
-              max="70"
-            />
-            <PropertyHandler
-              propertyLabel="Foot size"
-              property={leg.footWidth}
-              propertyName="footWidth"
-              change={this.changeCSSProperty.bind(this)}
-              id={leg.id}
-              min="0"
-              max="15"
-            />
-            <PropertyHandler
-              propertyLabel="Leg height"
-              property={leg.legHeight}
-              propertyName="legHeight"
-              change={this.changeCSSProperty.bind(this)}
-              id={leg.id}
-              min="1"
-              max="50"
-            />
-            <PropertyHandler
-              propertyLabel="Leg width"
-              property={leg.size}
-              propertyName="size"
-              change={this.changeCSSProperty.bind(this)}
-              id={leg.id}
-              min="1"
-              max="20"
-            />
-            <PropertyHandler
-              propertyLabel="speed"
-              property={leg.speed}
-              propertyName="speed"
-              change={this.changeCSSProperty.bind(this)}
-              id={leg.id}
-              min=".1"
-              max="2"
-            />
-          </div>
-        </div>
-      );
-    });
+    const { legs, menu, showCard } = this.state;
+    let appClasses = 'App ';
+    let legsRender = {};
+    let legsCards = null;
+    if (legs) {
+      if (showCard.length > 0) {
+        appClasses += 'blurred ';
+        legsCards = legs.map(leg => {
+          if (leg.id === showCard) {
+            return (
+              <DetailCard
+                key={leg.id + '_Card'}
+                leg={leg}
+                cardCloser={this.showCardFromId}
+                cssHandler={this.changeLegsCSSProperty.bind(this)}
+              />
+            );
+          } else {
+            return null;
+          }
+        });
+      }
+      legsRender = legs.map(leg => {
+        return (
+          <Legs
+            legId={leg.id}
+            key={leg.id}
+            leg={leg}
+            click={this.showCardFromId.bind(this, leg.id)}
+          />
+        );
+      });
+    }
     /*<div className="App">{legsRender}</div>*/
-
+    /*<div className={'App' + showCard.length > 0 ? ' blurred' : ''}>*/
+    // if
     return (
       <StyleRoot>
-        <div className="App">
-          <Menu isOpen={menu.isOpen} menuHandler={this.toogleMenu.bind(this)} />
+        <div className={appClasses}>
+          <Menu
+            addPart={this.addPart}
+            isOpen={menu.isOpen}
+            menuCloser={menu.close.bind(this)}
+            menuHandler={menu.toggle.bind(this)}
+          />
+          {legsRender}
         </div>
+        {legsCards}
       </StyleRoot>
     );
   }

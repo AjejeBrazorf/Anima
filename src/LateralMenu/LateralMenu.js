@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Radium from 'radium';
+import onClickOutside from 'react-onclickoutside';
+
 import './LateralMenu.scss';
 
 const lateralMenu = props => {
-  //  styles.legWrapper.walkingAnglePure = props.walkingAnglePure;
-  console.log(props.isOpen);
+  lateralMenu.handleClickOutside = () => props.menuCloser();
+
   return (
     <div className={'lateral-bar ' + (props.isOpen ? 'show' : null)} id="bar">
       <div className="btn btn--done" />
@@ -12,7 +14,10 @@ const lateralMenu = props => {
         <div className="btn btn--head" />
         <div className="btn btn--arms" />
         <div className="btn btn--body" />
-        <div className="btn btn--leg" />
+        <div
+          className="btn btn--leg"
+          onClick={props.addPart.bind(this, 'legs')}
+        />
       </div>
       <div
         className="btn btn--fixed"
@@ -22,4 +27,9 @@ const lateralMenu = props => {
     </div>
   );
 };
-export default Radium(lateralMenu);
+
+const clickOutsideConfig = {
+  handleClickOutside: () => lateralMenu.handleClickOutside
+};
+
+export default Radium(onClickOutside(lateralMenu, clickOutsideConfig));

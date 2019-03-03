@@ -4,8 +4,7 @@ import styles from './../Leg.module.scss';
 
 const legs = props => {
   //  styles.legWrapper.walkingAnglePure = props.walkingAnglePure;
-
-  const legWrapper = document.getElementById(props.leg.id);
+  const legWrapper = document.getElementById(props.legId);
   if (legWrapper) {
     const frontLeg = legWrapper.childNodes[0];
     const backtLeg = legWrapper.childNodes[1];
@@ -53,8 +52,11 @@ const legs = props => {
   }
   return (
     <div
-      className={styles.legWrapper + ' ' + styles[props.leg.animation]}
-      id={props.leg.id}>
+      onClick={props.click}
+      className={
+        styles.legWrapper + ' legWrapper ' + styles[props.leg.animation]
+      }
+      id={props.legId}>
       <div className={styles.leg + ' ' + styles[props.leg.animation]} />
       <div
         className={
